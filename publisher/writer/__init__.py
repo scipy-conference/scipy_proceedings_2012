@@ -10,9 +10,12 @@ from docutils.writers.latex2e import (Writer, LaTeXTranslator,
 from rstmath import mathEnv
 import code_block
 
-from options import options, inst_table
+from options import options
 
-from collections import OrderedDict
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
 
 PreambleCmds.float_settings = '''
 \\usepackage[font={small,it},labelfont=bf]{caption}
@@ -34,9 +37,14 @@ class Translator(LaTeXTranslator):
         self.abstract_text = []
         self.keywords = ''
         self.table_caption = []
+        self.video_url = ''
 
         self.abstract_in_progress = False
         self.non_breaking_paragraph = False
+
+        self.figure_type = 'figure'
+        self.figure_alignment = 'left'
+        self.table_type = 'table'
 
     def visit_docinfo(self, node):
         pass
@@ -68,6 +76,8 @@ class Translator(LaTeXTranslator):
             self.author_emails.append(text)
         elif self.current_field == 'institution':
             self.author_institutions.append(text)
+        elif self.current_field == 'video':
+            self.video_url = text
 
         self.current_field = ''
 
@@ -153,9 +163,16 @@ class Translator(LaTeXTranslator):
 
         ## Set up title and page headers
 
+        if not self.video_url:
+            video_template = ''
+        else:
+            video_template = r'\\\vspace{5mm}\tt\url{%s}\vspace{-5mm}' % self.video_url
+
         title_template = r'\newcounter{footnotecounter}' \
-                         r'\title{%s}\author{%s}\maketitle'
-        title_template = title_template % (title, ', '.join(authors))
+                r'\title{%s}\author{%s' \
+                r'%s}\maketitle'
+        title_template = title_template % (title, ', '.join(authors),
+                                           video_template)
 
         marks = r'''
           \renewcommand{\leftmark}{%s}
@@ -226,24 +243,46 @@ class Translator(LaTeXTranslator):
 
     def visit_figure(self, node):
         self.requirements['float_settings'] = PreambleCmds.float_settings
+
+        self.figure_type = 'figure'
         if 'classes' in node.attributes:
-            placements = ''.join(node.attributes['classes'])
-            self.out.append('\\begin{figure}[%s]'%placements)
-        else:
-            self.out.append('\\begin{figure}')
+            placements = '[%s]' % ''.join(node.attributes['classes'])
+            if 'w' in placements:
+                placements = placements.replace('w', '')
+                self.figure_type = 'figure*'
+
+        self.out.append('\\begin{%s}%s' % (self.figure_type, placements))
+
         if node.get('ids'):
             self.out += ['\n'] + self.ids_to_labels(node)
 
+        self.figure_alignment = node.attributes.get('align', 'center')
+
+    def depart_figure(self, node):
+        self.out.append('\\end{%s}' % self.figure_type)
+
     def visit_image(self, node):
-        attrs = node.attributes
+        align = self.figure_alignment or 'center'
+        scale = node.attributes.get('scale', None)
+        filename = node.attributes['uri']
+
+        if self.figure_type == 'figure*':
+            width = r'\textwidth'
+        else:
+            width = r'\columnwidth'
+
+        figure_opts = []
+
+        if scale is not None:
+            figure_opts.append('scale=%.2f' % (scale / 100.))
 
         # Only add \columnwidth if scale or width have not been specified.
         if 'scale' not in node.attributes and 'width' not in node.attributes:
-            node.attributes['width'] = '\columnwidth'
+            figure_opts.append(r'width=\columnwidth')
 
-        node.attributes['align'] = 'left'
-
-        LaTeXTranslator.visit_image(self, node)
+        self.out.append(r'\noindent\makebox[%s][%s]' % (width, align[0]))
+        self.out.append(r'{\includegraphics[%s]{%s}}' % (','.join(figure_opts),
+                                                         filename))
 
     def visit_footnote(self, node):
         # Work-around for a bug in docutils where
@@ -254,7 +293,13 @@ class Translator(LaTeXTranslator):
         self.non_breaking_paragraph = True
 
     def visit_table(self, node):
-        self.out.append(r'\begin{table}')
+        classes = node.attributes.get('classes', [])
+        if 'w' in classes:
+            self.table_type = 'table*'
+        else:
+            self.table_type = 'table'
+
+        self.out.append(r'\begin{%s}' % self.table_type)
         LaTeXTranslator.visit_table(self, node)
 
     def depart_table(self, node):
@@ -263,7 +308,7 @@ class Translator(LaTeXTranslator):
         self.out.append(r'\caption{%s}' % ''.join(self.table_caption))
         self.table_caption = []
 
-        self.out.append(r'\end{table}')
+        self.out.append(r'\end{%s}' % self.table_type)
         self.active_table.set('preamble written', 1)
 
     def visit_thead(self, node):
@@ -272,6 +317,10 @@ class Translator(LaTeXTranslator):
         # (in the wrong place)
         self.table_caption = self.active_table.caption
         self.active_table.caption = []
+
+        opening = self.active_table.get_opening()
+        opening = opening.replace('linewidth', 'tablewidth')
+        self.active_table.get_opening = lambda: opening
 
         LaTeXTranslator.visit_thead(self, node)
 
@@ -322,12 +371,12 @@ class Translator(LaTeXTranslator):
 
     def visit_InlineMath(self, node):
         self.requirements['amsmath'] = r'\usepackage{amsmath}'
-        self.body.append('$' + node['latex'] + '$')
+        self.out.append('$' + node['latex'] + '$')
         raise nodes.SkipNode
 
     def visit_PartMath(self, node):
         self.requirements['amsmath'] = r'\usepackage{amsmath}'
-        self.body.append(mathEnv(node['latex'], node['label'], node['type']))
+        self.out.append(mathEnv(node['latex'], node['label'], node['type']))
         self.non_breaking_paragraph = True
         raise nodes.SkipNode
 
@@ -335,7 +384,7 @@ class Translator(LaTeXTranslator):
         if node["usepackage"]:
             for package in node["usepackage"]:
                 self.requirements[package] = r'\usepackage{%s}' % package
-        self.body.append("\n" + node['latex'] + "\n")
+        self.out.append("\n" + node['latex'] + "\n")
         raise nodes.SkipNode
 
 
