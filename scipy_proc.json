@@ -10,14 +10,15 @@
      },
      "year": "2012",
      "editor": [
-        "Stéfan van der Walt",
-        "Jarrod Millman"
+        "Aron Ahmadia",
+        "Jarrod Millman",
+        "Stéfan van der Walt"
      ],
      "volume": 5,
      "number": 1,
      "isbn": "value",
      "location": "Austin, Texas",
-     "dates": "July 16--21",
+     "dates": "July 16--21, 2012",
      "copyright": {
        "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
        "proceedings": ["The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
