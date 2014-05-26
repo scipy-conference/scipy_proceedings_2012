@@ -2,9 +2,6 @@
 
 .. |isodate| date:: %Y%m%dT%H%M
 
-.. |--| unicode:: U+02013 .. en dash
-    :trim:
-
 .. |registered|   unicode:: U+00AE .. REGISTERED SIGN
     :trim:
 
