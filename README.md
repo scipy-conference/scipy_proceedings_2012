@@ -1,37 +1,37 @@
-# SciPy Proceedings
+SciPy Proceedings
+=================
 
-## Paper Format
+Paper Format
+------------
 
 Papers are formatted using reStructuredText and the compiled version should be
 no longer than 7 pages, including figures.  Here are the steps to produce a
 paper:
 
-- Fork the
-  [scipy_proceedings](https://github.com/scipy-conference/scipy_proceedings)
-  repository on GitHub.
+- Fork the 2012 branch of the `scipy_proceedings
+  <https://github.com/scipy/scipy_proceedings>`__ repository on GitHub.
 
-- Check out the 2014 branch (``git checkout 2014``).
+- Check out the 2012 branch (`git checkout 2012`).
 
 - An example paper is provided in ``papers/00_vanderwalt``.  Create a new
   directory ``papers/firstname_surname``, copy the example paper into it, and
   modify to your liking.
 
-- Run ``./make_paper.sh papers/firstname_surname`` to compile your paper to
-  PDF (requires LaTeX, docutils, Python--see below).  The output appears in
+- Run ``./make_paper.sh papers/firstname_surname`` to compile your paper to PDF
+  (requires LaTeX, docutils, Python--see below).  The output appears in
   ``output/firstname_surname/paper.pdf``.
 
 - Once you are ready to submit your paper, file a pull request on GitHub.
-  **Please ensure that you file against the correct branch**--your branch
-  should be named 2014, and the pull-request should be against our 2014
-  branch.
+  Please ensure that you file against the correct branch--your branch should be
+  named 2012, and the pull-request should be against our 2012 branch.
 
 - Please do not modify any files outside of your paper directory.
 
-Pull requests are to be submitted by **June 15th**, but modifications are
-allowed during the open review period which ends July 5th.
+Pull requests are to be submitted by **July 15th**, but modifications may be
+pushed until August 12th.
 
-## General Guidelines
-
+General Guidelines
+``````````````````
 - All figures and tables should have captions.
 - License conditions on images and figures must be respected (Creative Commons,
   etc.).
@@ -39,8 +39,8 @@ allowed during the open review period which ends July 5th.
   overflow.
 - Avoid custom LaTeX markup where possible.
 
-## Other markup
-
+Other markup
+------------
 Please refer to the example paper in ``papers/00_vanderwalt`` for
 examples of how to:
 
@@ -48,11 +48,8 @@ examples of how to:
  - Use math markup
  - Include code snippets
 
-## Requirements
-
- - IEEETran (often packaged as ``texlive-publishers``, or download from
-   [CTAN](http://www.ctan.org/tex-archive/macros/latex/contrib/IEEEtran/) LaTeX
-   class
- - AMSmath LaTeX classes (included in most LaTeX distributions)
- - `docutils` 0.8 or later (``easy_install docutils``)
- - `pygments` for code highlighting (``easy_install pygments``)
+Requirements
+------------
+ - IEEETran and AMSmath LaTeX classes
+ - `docutils` 0.8 or later
+ - `pygments` for code highlighting
