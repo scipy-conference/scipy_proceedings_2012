@@ -578,7 +578,3 @@ References
            Journal of the American Society for Information Science, 41(6),
            391-407.
            
-
-.. |--| unicode:: U+2013   .. en dash
-.. |---| unicode:: U+2014  .. em dash, trimming surrounding whitespace
-   :trim:
