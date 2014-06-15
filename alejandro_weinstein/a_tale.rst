@@ -36,9 +36,9 @@ we integrate several libraries, developed by different groups, to solve some of
 our research problems.
 
 Our research focuses on using Reinforcement Learning (RL) to gather information
-in domains described by an underlying linked dataset. For instance, we are
+in domains described by an underlying linked dataset. We are
 interested in problems such as the following: given a Wikipedia article as a
-seed, finding other articles that are interesting relative to the starting
+seed, find other articles that are interesting relative to the starting
 point. Of particular interest is to find articles that are more than one-click
 away from the seed, since these articles are in general harder to find by a
 human.
@@ -68,7 +68,7 @@ between documents, to leverage a variety of RL techniques that require a vector
 representation. We use the Gensim library to build the LSA model. This library
 provides all the machinery to build, among other options, the LSA model. One
 place where Gensim shines is in its capability to handle big data sets, like
-the entire Wikipedia, that do not fit in memory. We also combine the vector
+the entirety of Wikipedia, that do not fit in memory. We also combine the vector
 representation of the items as a property of the NetworkX nodes.
 
 Finally, we also use the manifold learning capabilities of sckit-learn, like
@@ -278,7 +278,7 @@ significantly smaller values for the remaining ones.
 Next, we build the LSA model for Wikipedia that allows us to compute the
 similarity between Wikipedia articles. Although this is a lengthy process that
 takes more than 20 hours, once the model is built, a similarity computation is
-very fast (on the order of 10 milliseconds). The results in next section make
+very fast (on the order of 10 milliseconds). Results in the next section make
 use of this model.
 
 Note that although in principle it is simple to compute the LSA model of a
@@ -296,7 +296,7 @@ Representing the State Space as a Graph
 We are interested in the problem of gathering information in domains described
 by linked datasets. It is natural to describe such domains by graphs. We use
 the NetworkX library [Hag08]_ to build the graphs we work with. NetworkX
-provides data structures to represents different kinds of graphs (undirected,
+provides data structures to represent different kinds of graphs (undirected,
 weighted, directed, etc.), together with implementations of many graph
 algorithms. NetworkX allows one to use any hashable Python object as a node
 identifier. Also, any Python object can be used as a node, edge, or graph
@@ -307,7 +307,7 @@ The following code snippet shows a function [#]_ used to build a directed graph
 where nodes represent Wikipedia articles, and the edges represent links between
 articles. Note that we compute the LSA representation of the article (line 11),
 and that this vector is used as a node attribute (line 13). The function
-obtains up to ``n_max`` articles by breath-first crawling the Wikipedia,
+obtains up to ``n_max`` articles by breadth-first crawling the Wikipedia,
 starting from the article defined by ``page``.
 
 .. code-block:: python
@@ -356,7 +356,11 @@ corresponding to the seed article is in light blue and the remaining nodes have
 a size proportional to the similarity with respect to the seed. Red nodes are
 the ones with similarity bigger than 0.5. We observe two nodes, "Defense" and
 "Weapon", with similarities 0.7 and 0.53 respectively, that are three links
-ahead of the seed.
+away from the seed.
+
+.. [#] The Simple English Wikipedia (http://simple.wikipedia.org) has articles
+       written in *simple English* and has a much smaller number of articles
+       than the standard Wikipedia. We use it because of its simplicity.
 
 .. [#] To generate this figure, we save the NetworkX graph in GEXF format, and
        create the diagram using Gephi (http://gephi.org/).
@@ -366,17 +370,13 @@ as seed. We set the limit on the number of articles to visit to 2000. We show
 the result in Fig. :ref:`figGleick`, where, as in the previous example, the
 node corresponding to the seed is in light blue and the remaining nodes have a
 size proportional to the similarity with respect to the seed. The eleven red
-nodes are the ones with similarity bigger than 0.7. Of these, 9 are more than
-one link ahead of the seed. We see that the article with the biggest
+nodes are the ones with similarity greater than 0.7. Of these, 9 are more than
+one link away from the seed. We see that the article with the biggest
 similarity, with a value of 0.8, is about "Robert Wright (journalist)", and it
-is two links ahead from the seed (passing through the "Slate magazine"
+is two links away from the seed (passing through the "Slate magazine"
 article). Robert Wright writes books about sciences, history and religion. It
 is very reasonable to consider him an author similar to James Gleick. 
 
-
-.. [#] The Simple English Wikipedia (http://simple.wikipedia.org) has articles
-       written in *simple English* and has a much smaller number of articles
-       than the standard Wikipedia. We use it because of its simplicity.
 
 .. [#] James Gleick is "an American author, journalist, and biographer, whose
     books explore the cultural ramifications of science and technology".
@@ -386,7 +386,7 @@ is very reasonable to consider him an author similar to James Gleick.
    Graph for the "Army" article in the simple Wikipedia with 97 nodes and 99
    edges. The seed article is in light blue. The size of the nodes (except for
    the seed node) is proportional to the similarity. In red are all the nodes
-   with similarity bigger than 0.5. We found two articles ("Defense" and
+   with similarity greater than 0.5. We found two articles ("Defense" and
    "Weapon") similar to the seed three links ahead. :label:`figArmy`
 
 .. figure:: gleick.pdf
@@ -398,8 +398,8 @@ is very reasonable to consider him an author similar to James Gleick.
    similarity more than one link ahead. :label:`figGleick`
             
 
-Another place where graphs can play an important role in the RL problem is when
-we want to find basis functions to approximate the value-function. The
+Another place where graphs can play an important role in the RL problem is in
+finding basis functions to approximate the value-function. The
 value-function is the function :math:`V^\pi: \mathcal{X} \mapsto \mathbb{R}`
 defined as
 
@@ -507,7 +507,7 @@ Conclusions
 
 We have presented an example where we use different elements of the scientific
 Python ecosystem to solve a research problem. Since we use libraries where
-NumPy arrays are used as the default vector/matrix format, the integration
+NumPy arrays are used as the standard vector/matrix format, the integration
 among these components is transparent. We believe that this work is a good
 success story that validates Python as a viable scientific programming
 language.
@@ -515,7 +515,7 @@ language.
 Our work shows that in many cases it is advantageous to use general purposes
 languages, like Python, for scientific computing. Although some computational
 parts of this work might be somewhat simpler to implement in a domain specific
-language, [#]_ the breath of tasks that we work with could make it hard to
+language, [#]_ the breadth of tasks that we work with could make it hard to
 integrate all of the parts using a domain specific language.
 
 .. [#] Examples of such languages are MATLAB, Octave, SciLab, etc.
