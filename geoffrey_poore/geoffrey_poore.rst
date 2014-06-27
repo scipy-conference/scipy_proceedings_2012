@@ -425,7 +425,7 @@ arbitrary polynomial.
    eq += '=0'
    # Get roots and format for LaTeX
    r = ['{0:+.3f}'.format(root) 
-     for root in roots(coeff)]
+        for root in roots(coeff)]
    latex_roots = ','.join(r)
    \end{pylabcode}
 
