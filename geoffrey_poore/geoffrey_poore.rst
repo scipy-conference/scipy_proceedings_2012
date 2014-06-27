@@ -50,12 +50,12 @@ figure, modify it, and execute it before returning to LaTeX.
 One way to streamline this process is to include non-LaTeX code within 
 LaTeX documents, with a means to execute this code and access the 
 output. Sweave is one of the earlier and better-known examples of this 
-approach [Sweave]_.  It provides access to the R statistical environment.
+approach [Leisch]_.  It provides access to the R statistical environment.
 Access to Python within LaTeX goes back to at least 
 2007, with Martin R. Ehmsen's python.sty style file [Ehmsen]_. Since 2008, 
 SageTeX has provided access to the Sage mathematics system from within LaTeX 
-[SageTeX]_. Because Sage is largely based on Python, it also provides 
-Python access. SympyTeX (2009) is based on SageTeX [SympyTeX]_. Though 
+[Drake]_. Because Sage is largely based on Python, it also provides 
+Python access. SympyTeX (2009) is based on SageTeX [Molteno]_. Though 
 SympyTeX is primarily intended for accessing the SymPy library for 
 symbolic mathematics [SymPy]_, it provides general access to Python.
 
@@ -944,34 +944,51 @@ please visit https://github.com/gpoore/pythontex.
 References
 ----------
 
-.. [Sweave] F. Leisch. *Sweave: Dynamic generation of statistical reports 
+.. [Leisch] F. Leisch. *Sweave: Dynamic generation of statistical reports 
             using literate data analysis*, in Wolfgang Härdle and Bernd Rönz, 
             editors, Compstat 2002 - Proceedings in Computational Statistics, 
-            pages 575-580. Physica Verlag, Heidelberg, 2002. ISBN 3-7908-1517-9.
-            http://www.statistik.lmu.de/~leisch/Sweave/
+            pages 575-580. Physica Verlag, Heidelberg, 2002. ISBN 
+            3-7908-1517-9. http://www.statistik.lmu.de/~leisch/Sweave/.
 
 .. [Ehmsen] M. R. Ehmsen.  "Python in LaTeX." 
-            http://web.archive.org/web/20080728170129/www.imada.sdu.dk/~ehmsen/python.sty
+            http://www.ctan.org/pkg/python.
 
-.. [SageTeX] D. Drake. "The SageTeX package." 
-             https://bitbucket.org/ddrake/sagetex/
+.. [Drake] D. Drake. "The SageTeX package." 
+             https://bitbucket.org/ddrake/sagetex/.
 
-.. [SympyTeX] T. Molteno. "The sympytex package."
-              https://github.com/tmolteno/SympyTeX/
+.. [Molteno] T. Molteno. "The sympytex package."
+              https://github.com/tmolteno/SympyTeX/.
 
-.. [SymPy] SymPy Development Team. "SymPy." http://sympy.org/
+.. [SymPy] SymPy Development Team. "SymPy." http://sympy.org/.
 
 .. [Pyg] The Pocoo Team. "Pygments: Python Syntax Highlighter."
-         http://pygments.org/
+         http://pygments.org/.
 
 .. [FV] T. Van Zandt, D. Girou, S. Rahtz, and H. Voß.  "The 'fancyvrb'
-        package:  Fancy Verbatims in LaTeX." http://www.ctan.org/pkg/fancyvrb
+        package:  Fancy Verbatims in LaTeX." http://www.ctan.org/pkg/fancyvrb.
 		 
 .. [MPL] J. D. Hunter. *Matplotlib: A 2D Graphics Environment*, in Computing in  
          Science & Engineering, Vol. 9, No. 3. (2007), pp. 90-95.
-         http://matplotlib.sourceforge.net/
+         http://matplotlib.sourceforge.net/.
          
-.. [NP] Numpy developers.  "NumPy."  http://numpy.scipy.org/
+.. [NP] Numpy developers.  "NumPy."  http://numpy.scipy.org/.
 
 .. [LST] C. Heinz and B. Moses.  "The Listings Package."
-         http://www.ctan.org/tex-archive/macros/latex/contrib/listings/
+         http://www.ctan.org/tex-archive/macros/latex/contrib/listings/.
+
+.. [IPY] The IPython development team. "The IPython Notebook." 
+         http://ipython.org/notebook.html.
+
+.. [Pastell] M. Pastell. "Pweave - reports from data with Python."
+             http://mpastell.com/pweave/.
+
+.. [Knuth] D. E. Knuth. *Literate Programming*. CSLI Lecture Notes, no. 27. 
+           Stanford, California: Center for the Study of Language and 
+           Information, 1992.
+
+.. [Ramsey] N. Ramsey. *Literate programming simplified*. IEEE Software, 
+            11(5):97-105, September 1994.  http://www.cs.tufts.edu/~nr/noweb/.
+
+.. [Schwab] M. Schwab, M. Karrenbach, and J. Claerbout.
+            *Making scientific computations reproducible*.
+            Computing in Science \& Engineering, 2(6):61-67, Nov/Dec 2000.
