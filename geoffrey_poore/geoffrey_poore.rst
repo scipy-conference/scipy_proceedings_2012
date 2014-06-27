@@ -84,11 +84,11 @@ An additional issue is that it is difficult for LaTeX code to interact with
 code in other languages, when the code in other languages has already been 
 executed and removed before LaTeX runs.
 
-In another approach to including executable code in LaTeX documents,
-the original document is valid LaTeX, containing code in special commands
-and environments.  The code is extracted by LaTeX itself during compilation, 
-then executed and replaced by its output.  Such approaches with Python go 
-back to at least 2007, with Martin R. Ehmsen's python.sty style file 
+In an alternate approach to including executable code in LaTeX documents,
+the original document is valid LaTeX, containing code wrapped in special 
+commands and environments.  The code is extracted by LaTeX itself during
+compilation, then executed and replaced by its output.  Such approaches with 
+Python go back to at least 2007, with Martin R. Ehmsen's python.sty style file 
 [Ehmsen]_.  Since 2008, SageTeX has provided access to the Sage mathematics 
 system from within LaTeX [Drake]_. Because Sage is largely based on Python, 
 it also provides Python access. SympyTeX (2009) is based on SageTeX 
@@ -132,7 +132,7 @@ within LaTeX documents. It emphasizes performance and usability.
 While PythonTeX lacks the rapid interactivity of the IPython notebook, as a 
 LaTeX package it offers much tighter Python-LaTeX integration.  It also 
 provides greater control over what is displayed (code, stdout, or stderr)
-and allows code to be included inline within normal text.
+and allows executable code to be included inline within normal text.
 
 This paper presents the main features of PythonTeX and considers several 
 examples.  It also briefly discusses the internal workings of the package.
