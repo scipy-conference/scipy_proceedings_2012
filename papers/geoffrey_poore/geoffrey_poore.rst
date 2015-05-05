@@ -23,7 +23,7 @@ PythonTeX:  Fast Access to Python from within LaTeX
    so that printed content is easily accessible and error messages have 
    meaningful line numbering. 
 
-   PythonTeX greatly simplifies scientific document creation with LaTeX. 
+   PythonTeX simplifies scientific document creation with LaTeX. 
    Plots can be created with matplotlib and then customized in place. 
    Calculations can be performed and automatically typeset with NumPy. 
    SymPy can be used to automatically create mathematical tables and 
@@ -49,19 +49,58 @@ figure, modify it, and execute it before returning to LaTeX.
 
 One way to streamline this process is to include non-LaTeX code within 
 LaTeX documents, with a means to execute this code and access the 
-output. Sweave is one of the earlier and better-known examples of this 
-approach [Sweave]_.  It provides access to the R statistical environment.
-Access to Python within LaTeX goes back to at least 
-2007, with Martin R. Ehmsen's python.sty style file [Ehmsen]_. Since 2008, 
-SageTeX has provided access to the Sage mathematics system from within LaTeX 
-[SageTeX]_. Because Sage is largely based on Python, it also provides 
-Python access. SympyTeX (2009) is based on SageTeX [SympyTeX]_. Though 
-SympyTeX is primarily intended for accessing the SymPy library for 
-symbolic mathematics [SymPy]_, it provides general access to Python.
+output.  That approach has connections to Knuth's concept of literate 
+programming, in which code and its documentation are combined in a single 
+document [Knuth]_.  The noweb literate programming tool 
+extended Knuth's work to additional document formats and arbitrary 
+programming languages [Ramsey]_.  Sweave subsequently built on noweb by 
+allowing the output of individual chunks of R code to be accessed within the
+document [Leisch]_.  This made possible dynamic reports that are 
+reproducible since they contain the code that generated their results.  As 
+such, Sweave and similar tools represent an additional, complementary 
+approach to reproducibility compared to makefile-based approaches [Schwab]_.
+
+Several methods of including executable code in LaTeX documents ultimately 
+function as preprocessors or templating systems.  A document might contain
+a mix of LaTeX and code, and the preprocessor replaces the code with its 
+output.  The original document would not be valid LaTeX; only the 
+preprocessed document would be.  Sweave, knitr [Xie]_, the Python-based 
+Pweave [Pastell]_, and template libraries such as Mako [MK]_ function in 
+this manner.  More recently, the IPython notebook has provided an 
+interactive browser-based interface in which text, code, and code output 
+may be interspersed [IPY]_.  Since the notebook can be exported as LaTeX, it
+functions similarly to the preprocessor-style approach.
+
+The preprocessor/templating-style approach has a significant advantage.  All 
+of the examples mentioned above are compatible with multiple document 
+formats, not just LaTeX.  This is particularly true in the case of 
+templating libraries.  One significant drawback is that the line numbers 
+of the preprocessed document, which LaTeX receives, do not correspond to 
+those of the original document.  This makes it difficult to debug LaTeX 
+errors, particularly in longer documents.  It also breaks standard LaTeX 
+tools such as forward and inverse search between a document and its PDF 
+(or other) output; only Sweave and knitr have systems to work around this.  
+An additional issue is that it is difficult for LaTeX code to interact with 
+code in other languages, when the code in other languages has already been 
+executed and removed before LaTeX runs.
+
+In an alternate approach to including executable code in LaTeX documents,
+the original document is valid LaTeX, containing code wrapped in special 
+commands and environments.  The code is extracted by LaTeX itself during
+compilation, then executed and replaced by its output.  Such approaches with 
+Python go back to at least 2007, with Martin R. Ehmsen's python.sty style file 
+[Ehmsen]_.  Since 2008, SageTeX has provided access to the Sage mathematics 
+system from within LaTeX [Drake]_. Because Sage is largely based on Python, 
+it also provides Python access. SympyTeX (2009) is based on SageTeX 
+[Molteno]_.  Though SympyTeX is primarily intended for accessing the SymPy 
+library for symbolic mathematics [SymPy]_, it provides general access to 
+Python.  Since these packages begin with a valid LaTeX document, they
+automatically work with standard LaTeX editing tools and also allow LaTeX
+code to interact with Python.
 
 Python.sty, SageTeX, and SympyTeX illustrate the potential of a 
-Python-LaTeX solution. At the same time, they leave much of the 
-possible power of Python-LaTeX integration untapped.  Python.sty requires
+close Python-LaTeX integration. At the same time, they leave much of the 
+possible power of the Python-LaTeX combination untapped.  Python.sty requires
 that all Python code be executed every time the document is compiled.  
 SageTeX and SympyTeX separate code execution from document compilation,
 but because all code is executed in a single session, everything must 
@@ -90,10 +129,13 @@ within LaTeX documents. It emphasizes performance and usability.
   ``__future__``.  No changes to Python code are required to make 
   it compatible with PythonTeX.
 
-This paper presents the main features of PythonTeX and considers 
-several examples.  It also briefly discusses the internal workings of 
-the package. For additional information, please consult the full 
-documentation and source code at https://github.com/gpoore/pythontex. 
+While PythonTeX lacks the rapid interactivity of the IPython notebook, as a 
+LaTeX package it offers much tighter Python-LaTeX integration.  It also 
+provides greater control over what is displayed (code, stdout, or stderr)
+and allows executable code to be included inline within normal text.
+
+This paper presents the main features of PythonTeX and considers several 
+examples.  It also briefly discusses the internal workings of the package.
 
 
 PythonTeX environments and commands
@@ -425,7 +467,7 @@ arbitrary polynomial.
    eq += '=0'
    # Get roots and format for LaTeX
    r = ['{0:+.3f}'.format(root) 
-     for root in roots(coeff)]
+        for root in roots(coeff)]
    latex_roots = ','.join(r)
    \end{pylabcode}
 
@@ -944,34 +986,61 @@ please visit https://github.com/gpoore/pythontex.
 References
 ----------
 
-.. [Sweave] F. Leisch. *Sweave: Dynamic generation of statistical reports 
+.. [Leisch] F. Leisch. *Sweave: Dynamic generation of statistical reports 
             using literate data analysis*, in Wolfgang Härdle and Bernd Rönz, 
             editors, Compstat 2002 - Proceedings in Computational Statistics, 
-            pages 575-580. Physica Verlag, Heidelberg, 2002. ISBN 3-7908-1517-9.
-            http://www.statistik.lmu.de/~leisch/Sweave/
+            pages 575-580. Physica Verlag, Heidelberg, 2002. ISBN 
+            3-7908-1517-9. http://www.statistik.lmu.de/~leisch/Sweave/.
 
 .. [Ehmsen] M. R. Ehmsen.  "Python in LaTeX." 
-            http://web.archive.org/web/20080728170129/www.imada.sdu.dk/~ehmsen/python.sty
+            http://www.ctan.org/pkg/python.
 
-.. [SageTeX] D. Drake. "The SageTeX package." 
-             https://bitbucket.org/ddrake/sagetex/
+.. [Drake] D. Drake. "The SageTeX package." 
+             https://bitbucket.org/ddrake/sagetex/.
 
-.. [SympyTeX] T. Molteno. "The sympytex package."
-              https://github.com/tmolteno/SympyTeX/
+.. [Molteno] T. Molteno. "The sympytex package."
+              https://github.com/tmolteno/SympyTeX/.
 
-.. [SymPy] SymPy Development Team. "SymPy." http://sympy.org/
+.. [SymPy] SymPy Development Team. "SymPy." http://sympy.org/.
 
 .. [Pyg] The Pocoo Team. "Pygments: Python Syntax Highlighter."
-         http://pygments.org/
+         http://pygments.org/.
 
 .. [FV] T. Van Zandt, D. Girou, S. Rahtz, and H. Voß.  "The 'fancyvrb'
-        package:  Fancy Verbatims in LaTeX." http://www.ctan.org/pkg/fancyvrb
+        package:  Fancy Verbatims in LaTeX." http://www.ctan.org/pkg/fancyvrb.
 		 
 .. [MPL] J. D. Hunter. *Matplotlib: A 2D Graphics Environment*, in Computing in  
          Science & Engineering, Vol. 9, No. 3. (2007), pp. 90-95.
-         http://matplotlib.sourceforge.net/
+         http://matplotlib.sourceforge.net/.
          
-.. [NP] Numpy developers.  "NumPy."  http://numpy.scipy.org/
+.. [NP] Numpy developers.  "NumPy."  http://numpy.scipy.org/.
 
 .. [LST] C. Heinz and B. Moses.  "The Listings Package."
-         http://www.ctan.org/tex-archive/macros/latex/contrib/listings/
+         http://www.ctan.org/tex-archive/macros/latex/contrib/listings/.
+
+.. [IPY] The IPython development team. "The IPython Notebook." 
+         http://ipython.org/notebook.html.
+
+.. [Pastell] M. Pastell. "Pweave - reports from data with Python."
+             http://mpastell.com/pweave/.
+
+.. [Knuth] D. E. Knuth. *Literate Programming*. CSLI Lecture Notes, no. 27. 
+           Stanford, California: Center for the Study of Language and 
+           Information, 1992.
+
+.. [Ramsey] N. Ramsey. *Literate programming simplified*. IEEE Software, 
+            11(5):97-105, September 1994.  http://www.cs.tufts.edu/~nr/noweb/.
+
+.. [Schwab] M. Schwab, M. Karrenbach, and J. Claerbout.
+            *Making scientific computations reproducible*.
+            Computing in Science \& Engineering, 2(6):61-67, Nov/Dec 2000.
+
+.. [Xie] Y. Xie.  "knitr:  Elegant, flexible and fast dynamic report 
+         generation with R." http://yihui.name/knitr/.
+
+.. [MK] M. Bayer.  "Mako Templates for Python."
+        http://www.makotemplates.org/.
+
+
+
+
