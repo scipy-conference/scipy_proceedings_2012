@@ -62,8 +62,7 @@ spectral overlap (spillover) between fluorescent dyes.
 .. figure:: flow.jpg
    :scale: 50%
    :align: center
-   :figclass: align-center
-   
+
    Diagram of how events are recorded in a flow cytometer provided by
    lanl.gov :label:`flow`
 
